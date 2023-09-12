@@ -20,7 +20,7 @@ def create_new_album(album: AlbumModel):
     try:
         inserted_id = collection.insert_one(album).inserted_id
         return str(inserted_id)
-    except DuplicateKeyError:
+    except Exception as error:
         raise ValueError("Album with the same title, artist, and year already exists.")
 
 # Fungsi 2: Mendapatkan data satu album berdasarkan title dan artist 
@@ -43,7 +43,7 @@ def delete_album(album_id: str):
 
 # Fungsi 5: Update data album berdasarkan id (ObjectId) 
 def update_album(
-    album_id: str,
+    album_id: ObjectId,
     title: Optional[str] = None,
     artist: Optional[str] = None,
     year: Optional[int] = None,
@@ -61,5 +61,8 @@ def update_album(
         update_data["genre"] = genre
     if stock:
         update_data["stock"] = stock
-    result = collection.update_one({"_id": ObjectId(album_id)}, {"$set": update_data})
+    try:
+        result = collection.update_one({"_id": ObjectId(album_id)}, {"$set": update_data})
+    except Exception as error:
+        raise error
     return result.modified_count > 0
