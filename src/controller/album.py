@@ -6,6 +6,7 @@ from bson import ObjectId
 from typing import List, Optional
 import os
 from dotenv import load_dotenv
+import time
 
 load_dotenv()
 
@@ -26,6 +27,7 @@ def create_new_album(album: AlbumModel):
 # Fungsi 2: Mendapatkan data satu album berdasarkan title dan artist 
 def get_album(title: str, artist: str):
     album = collection.find_one({"title": title, "artist": artist})
+    time.sleep(5)
     if album:
         return album
     else:
@@ -33,6 +35,7 @@ def get_album(title: str, artist: str):
 
 # Fungsi 3: Mendapatkan data banyak album berdasarkan artist 
 def get_albums_by_artist(artist: str) -> List[AlbumModel]:
+    time.sleep(10)
     albums = collection.find({"artist": artist})
     return list(albums)
 
